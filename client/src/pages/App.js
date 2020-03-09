@@ -3,6 +3,10 @@ import { Route, Switch } from 'react-router-dom';
 import './App.css';
 import Home from './Home';
 import List from './List';
+import NavbarPage from './NavBar';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import LoginPage from './Login';
+import MyAccount from './MyAccount';
 
 class App extends Component {
   render() {
@@ -11,6 +15,9 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={Home}/>
           <Route path='/list' component={List}/>
+          <Route path='/NavBar' component={NavbarPage}/>
+          <Route path='/Login' component={LoginPage}/>
+          <Route path='/MyAccount' component={MyAccount}/>
         </Switch>
       </div>
     )
@@ -23,30 +30,3 @@ class App extends Component {
 }
 
 export default App;
-
-// import React from 'react';
-// import logo from './logo.svg';
-// import './App.css';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-
-// export default App;
