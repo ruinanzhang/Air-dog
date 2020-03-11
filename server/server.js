@@ -3,14 +3,18 @@ const express = require('express');
 var cors = require('cors');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const Data = require('./data');
+
 
 const API_PORT = 3001;
 const app = express();
 app.use(cors());
 const router = express.Router();
+//  Import User: 
+const User = require('./model/user');
+const UserSession = require('./model/UserSession');
 
-// this is our MongoDB database
+
+// Developed connection to MongoDB: 
 const dbRoute =
   'mongodb+srv://mimi:ZqDbk8tB5fQzINmS@clusterd-i8ypo.mongodb.net/test?&w=majority';
 
@@ -32,58 +36,143 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger('dev'));
 
-// this is our get method
-// this method fetches all available data in our database
-router.get('/getData', (req, res) => {
-  Data.find((err, data) => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true, data: data });
-  });
-});
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 
-// this is our update method
-// this method overwrites existing data in our database
-router.post('/updateData', (req, res) => {
-  const { id, update } = req.body;
-  Data.findByIdAndUpdate(id, update, (err) => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true });
-  });
-});
+// New addition: 
 
-// this is our delete method
-// this method removes existing data in our database
-router.delete('/deleteData', (req, res) => {
-  const { id } = req.body;
-  Data.findByIdAndRemove(id, (err) => {
-    if (err) return res.send(err);
-    return res.json({ success: true });
-  });
-});
-
-// this is our create methid
-// this method adds new data in our database
-router.post('/putData', (req, res) => {
-  let data = new Data();
-
-  const { id, message } = req.body;
-
-  if ((!id && id !== 0) || !message) {
-    return res.json({
+app.post('/api/signup', (req, res, next) => {
+  const { body } = req;
+  const {
+    password
+  } = body;
+  let {
+    email
+  } = body;
+  
+  if (!email) {
+    return res.send({
       success: false,
-      error: 'INVALID INPUTS',
+      message: 'Error: Email cannot be blank.'
     });
   }
-  data.message = message;
-  data.id = id;
-  data.save((err) => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true });
+  if (!password) {
+    return res.send({
+      success: false,
+      message: 'Error: Password cannot be blank.'
+    });
+  }
+  email = email.toLowerCase();
+  email = email.trim();
+  // Steps:
+  // 1. Verify email doesn't exist
+  // 2. Save
+  User.find({
+    email: email
+  }, (err, previousUsers) => {
+    if (err) {
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    } else if (previousUsers.length > 0) {
+      return res.send({
+        success: false,
+        message: 'Error: Account already exist.'
+      });
+    }
+    // Save the new user
+    const newUser = new User();
+    newUser.email = email;
+    newUser.password = password;
+    newUser.save((err, user) => {
+      if (err) {
+        return res.send({
+          success: false,
+          message: 'Error: Server error'
+        });
+      }
+      return res.send({
+        success: true,
+        message: 'Signed up'
+      });
+    });
+  });
+});
+
+// For signin: 
+app.post('/api/signin', (req, res, next) => {
+  const { body } = req;
+  const {
+    password
+  } = body;
+  let {
+    email
+  } = body;
+  if (!email) {
+    return res.send({
+      success: false,
+      message: 'Error: Email cannot be blank.'
+    });
+  }
+  if (!password) {
+    return res.send({
+      success: false,
+      message: 'Error: Password cannot be blank.'
+    });
+  }
+  email = email.toLowerCase();
+  email = email.trim();
+  User.find({
+    email: email
+  }, (err, users) => {
+    if (err) {
+      console.log('err 2:', err);
+      return res.send({
+        success: false,
+        message: 'Error: server error'
+      });
+    }
+    if (users.length != 1) {
+      return res.send({
+        success: false,
+        message: 'Error: Invalid'
+      });
+    }
+    const user = users[0];
+    if (!user.password) {
+      return res.send({
+        success: false,
+        message: 'Error: Invalid'
+      });
+    }
+    // Otherwise correct user
+    const userSession = new UserSession();
+    userSession.userId = user._id;
+    userSession.save((err, doc) => {
+      if (err) {
+        console.log(err);
+        return res.send({
+          success: false,
+          message: 'Error: server error'
+        });
+      }
+      return res.send({
+        success: true,
+        message: 'Valid sign in',
+        token: doc._id
+      });
+    });
   });
 });
 
 // append /api for our http requests
 app.use('/api', router);
 
+
 // launch our backend into a port
 app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
+
+module.exports = app;
+

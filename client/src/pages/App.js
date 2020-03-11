@@ -6,7 +6,8 @@ import List from './List';
 import NavbarPage from './NavBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginPage from './Login';
-import MyAccount from './MyAccount';
+// import MyAccount from './MyAccount';
+import Signup from './Signup';
 
 class App extends Component {
   render() {
@@ -17,7 +18,8 @@ class App extends Component {
           <Route path='/list' component={List}/>
           <Route path='/NavBar' component={NavbarPage}/>
           <Route path='/Login' component={LoginPage}/>
-          <Route path='/MyAccount' component={MyAccount}/>
+          <Route path='/Signup' component={Signup}/>
+          {/* <Route path='/MyAccount' component={MyAccount}/> */}
         </Switch>
       </div>
     )
