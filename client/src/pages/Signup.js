@@ -14,19 +14,19 @@ class Signup extends Component {
             isLoading: true,
             token: '',
             signUpError: '',
-            signInError: '',
-            signInEmail: '',
-            signInPassword: '',
+            // signInError: '',
+            // signInEmail: '',
+            // signInPassword: '',
             signUpEmail: '',
             signUpPassword: '',
         };
 
-        this.onTextboxChangeSignInEmail = this.onTextboxChangeSignInEmail.bind(this);
-        this.onTextboxChangeSignInPassword = this.onTextboxChangeSignInPassword.bind(this);
+        // this.onTextboxChangeSignInEmail = this.onTextboxChangeSignInEmail.bind(this);
+        // this.onTextboxChangeSignInPassword = this.onTextboxChangeSignInPassword.bind(this);
         this.onTextboxChangeSignUpEmail = this.onTextboxChangeSignUpEmail.bind(this);
         this.onTextboxChangeSignUpPassword = this.onTextboxChangeSignUpPassword.bind(this);
 
-        this.onSignIn = this.onSignIn.bind(this);
+        // this.onSignIn = this.onSignIn.bind(this);
         this.onSignUp = this.onSignUp.bind(this);
         // this.logout = this.logout.bind(this);
     }
@@ -38,17 +38,17 @@ class Signup extends Component {
 
     //  These functions help with updating values of textboxes/state values: 
 
-    onTextboxChangeSignInEmail(event) {
-        this.setState({
-            signInEmail: event.target.value,
-        });
-    }
+    // onTextboxChangeSignInEmail(event) {
+    //     this.setState({
+    //         signInEmail: event.target.value,
+    //     });
+    // }
 
-    onTextboxChangeSignInPassword(event) {
-        this.setState({
-            signInPassword: event.target.value,
-        });
-    }
+    // onTextboxChangeSignInPassword(event) {
+    //     this.setState({
+    //         signInPassword: event.target.value,
+    //     });
+    // }
 
     onTextboxChangeSignUpEmail(event) {
         this.setState({
@@ -106,56 +106,56 @@ class Signup extends Component {
 
 
 
-      onSignIn() {
-        // Grab state
-        const {
-          signInEmail,
-          signInPassword,
-        } = this.state;
+    //   onSignIn() {
+    //     // Grab state
+    //     const {
+    //       signInEmail,
+    //       signInPassword,
+    //     } = this.state;
 
-        this.setState({
-          isLoading: true,
-        });
+    //     this.setState({
+    //       isLoading: true,
+    //     });
 
-        // Post request to backend
-        fetch('/api/signin', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: signInEmail,
-            password: signInPassword,
-          }),
-        }).then(res => res.json())
-          .then(json => {
-            console.log('json', json);
-            if (json.success) {
-            //   setInStorage('the_main_app', { token: json.token });
-              this.setState({
-                signInError: json.message,
-                isLoading: false,
-                signInPassword: '',
-                signInEmail: '',
-                token: json.token,
-              });
-            } else {
-              this.setState({
-                signInError: json.message,
-                isLoading: false,
-              });
-            }
-          });
-      }
+    //     // Post request to backend
+    //     fetch('/api/signin', {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json'
+    //       },
+    //       body: JSON.stringify({
+    //         email: signInEmail,
+    //         password: signInPassword,
+    //       }),
+    //     }).then(res => res.json())
+    //       .then(json => {
+    //         console.log('json', json);
+    //         if (json.success) {
+    //         //   setInStorage('the_main_app', { token: json.token });
+    //           this.setState({
+    //             signInError: json.message,
+    //             isLoading: false,
+    //             signInPassword: '',
+    //             signInEmail: '',
+    //             token: json.token,
+    //           });
+    //         } else {
+    //           this.setState({
+    //             signInError: json.message,
+    //             isLoading: false,
+    //           });
+    //         }
+    //       });
+    //   }
 
 
     render() {
         const {
             isLoading,
             token,
-            signInError,
-            signInEmail,
-            signInPassword,
+            // signInError,
+            // signInEmail,
+            // signInPassword,
             signUpEmail,
             signUpPassword,
             signUpError,
@@ -166,29 +166,6 @@ class Signup extends Component {
         if (!token) {
             return (
                 <div>
-                    <div>
-                        {
-                            (signInError) ? (
-                                <p>{signInError}</p>
-                            ) : (null)
-                        }
-                        <p>Sign In</p>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={signInEmail}
-                            onChange={this.onTextboxChangeSignInEmail}
-                        />
-                        <br />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={signInPassword}
-                            onChange={this.onTextboxChangeSignInPassword}
-                        />
-                        <br />
-                        <button onClick={this.onSignIn}>Sign In</button>
-                    </div>
                     <br />
                     <br />
                     <div>
@@ -217,7 +194,7 @@ class Signup extends Component {
         }
         return (
             <div>
-                <p>Signed in</p>
+                <p>Signed up</p>
             </div>
         );
 
