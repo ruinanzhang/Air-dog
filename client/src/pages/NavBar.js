@@ -27,6 +27,35 @@ class NavbarPage extends Component {
         this.showCartMenu = this.showCartMenu.bind(this);
         this.closeMenu = this.closeMenu.bind(this);
     }
+    // // This is for log out 
+    // logout() {
+    //     this.setState({
+    //       isLoading: true,
+    //     });
+    //     const obj = getFromStorage('the_main_app');
+    //     if (obj && obj.token) {
+    //       const { token } = obj;
+    //       // Verify token
+    //       fetch('/api/account/logout?token=' + token)
+    //         .then(res => res.json())
+    //         .then(json => {
+    //           if (json.success) {
+    //             this.setState({
+    //               token: '',
+    //               isLoading: false
+    //             });
+    //           } else {
+    //             this.setState({
+    //               isLoading: false,
+    //             });
+    //           }
+    //         });
+    //     } else {
+    //       this.setState({
+    //         isLoading: false,
+    //       });
+    //     }
+    //   }
     showOrderMenu(event) {
         event.preventDefault();
 

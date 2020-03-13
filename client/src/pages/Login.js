@@ -2,8 +2,14 @@ import React, { Component } from "react";
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import Home from './Home';
+import 'whatwg-fetch';
 import Signup from './Signup';
 import { useHistory } from 'react-router-dom';
+// For verify token =: 
+import {
+  setInStorage,
+  getFromStorage,
+} from '../utils/storage';
 
 
 class LoginPage extends Component {
@@ -15,31 +21,25 @@ class LoginPage extends Component {
       signInError: '',
       signInEmail: '',
       signInPassword: '',
+      redirect : false,
     };
 
     this.onTextboxChangeSignInEmail = this.onTextboxChangeSignInEmail.bind(this);
     this.onTextboxChangeSignInPassword = this.onTextboxChangeSignInPassword.bind(this);
 
-    // this.handlePassChange = this.handlePassChange.bind(this);
-    // this.handleUserChange = this.handleUserChange.bind(this);
-    // this.handleSubmit = this.handleSubmit.bind(this);
-    // this.dismissError = this.dismissError.bind(this);
-
     this.onSignIn = this.onSignIn.bind(this);
   }
-  // state = {
-  //   redirect: false
-  // }
-  // setRedirect = () => {
-  //   this.setState({
-  //     redirect: true
-  //   })
-  // }
-  // renderRedirect = () => {
-  //   if (this.state.redirect) {
-  //     window.location.href = "/google.com";
-  //   }
-  // }
+
+  setRedirect = () => {
+    this.setState({
+      redirect: true
+    })
+  }
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      window.location.href = "/";
+    }
+  }
 
   // Functions starting from here: 
 
@@ -86,13 +86,14 @@ class LoginPage extends Component {
       .then(json => {
         console.log('json', json);
         if (json.success) {
-          //   setInStorage('the_main_app', { token: json.token });
+            setInStorage('the_main_app', { token: json.token });
           this.setState({
             signInError: json.message,
             isLoading: false,
             signInPassword: '',
             signInEmail: '',
             token: json.token,
+            redirect : true,
           });
         } else {
           this.setState({
@@ -157,6 +158,7 @@ class LoginPage extends Component {
     return (
       <div>
         <p>Signed in</p>
+        {window.location.href = "/"}
       </div>
     );
 

@@ -18,7 +18,8 @@ import './index.css';
 import App from './pages/App';
 
 render((
-    <BrowserRouter>
-        <App/>
-    </BrowserRouter>
+   
+        <BrowserRouter>
+            <App/>
+        </BrowserRouter>
 ), document.getElementById('root'));

@@ -85,7 +85,7 @@ app.post('/api/signup', (req, res, next) => {
     // Save the new user
     const newUser = new User();
     newUser.email = email;
-    newUser.password = password;
+    newUser.password = newUser.generateHash(password);
     newUser.save((err, user) => {
       if (err) {
         return res.send({
@@ -98,6 +98,74 @@ app.post('/api/signup', (req, res, next) => {
         message: 'Signed up'
       });
     });
+  });
+});
+
+
+// For log out: 
+
+app.get('/api/account/logout', (req, res, next) => {
+  // Get the token
+  const { query } = req;
+  const { token } = query;
+  // ?token=test
+  // Verify the token is one of a kind and it's not deleted.
+  UserSession.findOneAndUpdate({
+    _id: token,
+    isDeleted: false
+  }, {
+    $set: {
+      isDeleted:true
+    }
+  }, null, (err, sessions) => {
+    if (err) {
+      console.log(err);
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+    return res.send({
+      success: true,
+      message: 'Good'
+    });
+  });
+});
+
+// For verify token: 
+
+app.get('/api/verify', (req, res, next) => {
+  // Get the token
+  const { query } = req;
+  const { token } = query;
+  // ?token=test
+  // Verify the token is one of a kind and it's not deleted.
+  UserSession.find({
+    _id: token
+    // isDeleted: false
+  }, (err, sessions) => {
+    if (err) {
+      console.log(err);
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+    if (sessions.length != 1) {
+      
+      return res.send({
+        success: false,
+        message: 'Error: Invalid'
+      });
+    } else {
+      
+      return res.send({
+        success: true,
+        message: 'Good'
+        
+      });
+    
+    }
   });
 });
 
@@ -141,7 +209,7 @@ app.post('/api/signin', (req, res, next) => {
       });
     }
     const user = users[0];
-    if (!user.password) {
+    if (!user.validPassword(password)){
       return res.send({
         success: false,
         message: 'Error: Invalid'

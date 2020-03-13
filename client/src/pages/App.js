@@ -8,8 +8,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginPage from './Login';
 // import MyAccount from './MyAccount';
 import Signup from './Signup';
+import axios from 'axios';
+
 
 class App extends Component {
+  // checkLogin(){
+  //   axios.get("https://localhost:3001")
+  // }
   render() {
     const App = () => (
       <div>
@@ -19,6 +24,7 @@ class App extends Component {
           <Route path='/NavBar' component={NavbarPage}/>
           <Route path='/Login' component={LoginPage}/>
           <Route path='/Signup' component={Signup}/>
+          
           {/* <Route path='/MyAccount' component={MyAccount}/> */}
         </Switch>
       </div>
