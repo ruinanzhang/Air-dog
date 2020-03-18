@@ -4,6 +4,10 @@ const UserSessionSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  email : {
+    type: String,
+    default: ''
+  },
   timestamp: {
     type: Date,
     default: Date.now()

@@ -8,6 +8,8 @@ import {
   getFromStorage,
 } from '../utils/storage';
 
+import TopNav from './TopNav';
+
 
 const p1Style = {
   fontSize: '45px',
@@ -65,9 +67,10 @@ class Home extends Component {
       token,
       rightToken
  } = this.state;
-   if (this.state.rightToken){
+   if (rightToken){
     return (
       <div className="App">
+        <TopNav/>
         <NavbarPage />
         <div>
         <h1 style = {p1Style}>Welcom to Doggie Style!!</h1>

@@ -141,7 +141,8 @@ app.get('/api/verify', (req, res, next) => {
   // ?token=test
   // Verify the token is one of a kind and it's not deleted.
   UserSession.find({
-    _id: token
+    _id: token,
+    isDeleted : false
     // isDeleted: false
   }, (err, sessions) => {
     if (err) {
@@ -167,6 +168,45 @@ app.get('/api/verify', (req, res, next) => {
     
     }
   });
+});
+
+
+
+app.get('/api/hello', (req, res, next) => {
+  // Get the token
+  const { query } = req;
+  const { token} = query;
+   UserSession.find({
+    _id: token,
+    isDeleted : false,
+  }, (err, sessions) => {
+    if (err) {
+      // console.log(sessions);
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+    if (sessions.length != 1) {
+      
+      return res.send({
+        success: false,
+        message: 'Error: Invalid'
+      });
+    } else {
+
+      console.log(sessions[0].email);
+      return res.send({
+        success: true,
+        message: 'session success 2',
+        useremail: sessions[0].email
+        
+      });
+    }
+  });
+  
+  
+
 });
 
 // For signin: 
@@ -218,6 +258,7 @@ app.post('/api/signin', (req, res, next) => {
     // Otherwise correct user
     const userSession = new UserSession();
     userSession.userId = user._id;
+    userSession.email = user.email;
     userSession.save((err, doc) => {
       if (err) {
         console.log(err);
@@ -234,6 +275,100 @@ app.post('/api/signin', (req, res, next) => {
     });
   });
 });
+
+
+
+
+// For Find User Name in TopNav: 
+
+// app.get('/api/get_user', (req, res) => {
+//   // const { query } = req;
+//   // const { token } = query;
+//   res.send('Hello World!')
+
+
+//   // db.find({token}).toArray(function(err,users){
+//   //   console.log(users.email);
+//   //   res.send(users.email);
+//   // })
+
+
+// });  
+
+
+//March 16 try to get user!!!
+
+
+// app.get('/api/getUser', (req, res, next) => {
+//   const { query } = req;
+//   const { token } = query;
+
+//   User.findById({
+//     _id : token
+//     },(err, users)=> {
+//       if (err){
+//         console.log('Having this err:', err);
+//         return res.send({
+//           success: false,
+//           message: 'Error: getUser has serverz error'
+//         });
+//       }
+//       else{
+//         return res.send({
+//           success: false,
+//           message: 'Found User',
+//           useremail : users[0],
+//         })
+//       }
+//     }
+  
+//   )
+//   });
+//   // UserSession.find({
+//   //   _id: token,
+//   //   isDeleted : false
+//   //   // isDeleted: false
+//   // }, (err, sessions) => {
+//   //   if (err) {
+//   //     console.log(err);
+//   //     return res.send({
+//   //       success: false,
+//   //       message: 'Error: Server error'
+//   //     });
+//   //   }
+//   //   if (sessions.length != 1) {
+      
+//   //     return res.send({
+//   //       success: false,
+//   //       message: 'Error: Invalid'
+//   //     });
+//   //   } else {
+      
+//   //     return res.send({
+//   //       success: true,
+//   //       message: 'Good'
+        
+//   //     });
+    
+//   //   }
+//   // });
+
+// }); 
+
+// app.param('user', function (req, res, next, id) {
+//   // try to get the user details from the User model and attach it to the request object
+//   User.find(id, function (err, user) {
+//     if (err) {
+//       next(err)
+//     } else if (user) {
+//       req.user = user
+//       next()
+//     } else {
+//       next(new Error('failed to load user'))
+//     }
+//   })
+// })
+
 
 // append /api for our http requests
 app.use('/api', router);

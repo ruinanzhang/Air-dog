@@ -1,7 +1,9 @@
 // This is my top nav bar for the website
 import React, { Component } from "react";
-import Nav from 'react-bootstrap/Nav'
-import LoginPage from './Login';
+import {
+    getFromStorage
+  } from '../utils/storage';
+  
 
 // import 'bootstrap/dist/css/bootstrap.min.css';
 const p1Style = {
@@ -22,40 +24,13 @@ class NavbarPage extends Component {
         this.state = {
             showOrderMenu: false,
             showCartMenu: false,
+            isLoading: true,
         }
         this.showOrderMenu = this.showOrderMenu.bind(this);
         this.showCartMenu = this.showCartMenu.bind(this);
         this.closeMenu = this.closeMenu.bind(this);
     }
-    // // This is for log out 
-    // logout() {
-    //     this.setState({
-    //       isLoading: true,
-    //     });
-    //     const obj = getFromStorage('the_main_app');
-    //     if (obj && obj.token) {
-    //       const { token } = obj;
-    //       // Verify token
-    //       fetch('/api/account/logout?token=' + token)
-    //         .then(res => res.json())
-    //         .then(json => {
-    //           if (json.success) {
-    //             this.setState({
-    //               token: '',
-    //               isLoading: false
-    //             });
-    //           } else {
-    //             this.setState({
-    //               isLoading: false,
-    //             });
-    //           }
-    //         });
-    //     } else {
-    //       this.setState({
-    //         isLoading: false,
-    //       });
-    //     }
-    //   }
+   
     showOrderMenu(event) {
         event.preventDefault();
 
@@ -82,6 +57,7 @@ class NavbarPage extends Component {
     }
     render() {
         return (
+            
             <div className="justify-content-center">
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
                     <a className="navbar-brand" href="#" style={p1Style}>DoddgieStyle.com</a>
