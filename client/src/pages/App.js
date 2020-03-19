@@ -8,7 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginPage from './Login';
 // import MyAccount from './MyAccount';
 import Signup from './Signup';
-import axios from 'axios';
+
+import MyAccount from './MyAccount';
 
 
 class App extends Component {
@@ -25,7 +26,7 @@ class App extends Component {
           <Route path='/Login' component={LoginPage}/>
           <Route path='/Signup' component={Signup}/>
           
-          {/* <Route path='/MyAccount' component={MyAccount}/> */}
+          <Route path='/MyAccount' component={MyAccount}/>
         </Switch>
       </div>
     )

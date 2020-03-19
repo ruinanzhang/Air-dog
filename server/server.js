@@ -172,7 +172,7 @@ app.get('/api/verify', (req, res, next) => {
 
 
 
-app.get('/api/hello', (req, res, next) => {
+app.get('/api/verify_user', (req, res, next) => {
   // Get the token
   const { query } = req;
   const { token} = query;
@@ -276,98 +276,52 @@ app.post('/api/signin', (req, res, next) => {
   });
 });
 
+// For getAccount information: 
+app.get('/api/getAccount',(req,res,next) =>{
+  const { query } = req;
+  const {
+   token
+  } = query;
+  console.log(token);
+  User.find({
+    email: token,
+  },(err,users) =>{
+    if (err){
+      console.log(err);
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+    if (users.length != 1) {
+      console.log(users);
+      return res.send({
+        success: false,
+        message: 'Error: Invalid'
+      });
+    }else {
+      console.log(users);
+      return res.send({
+        success: true,
+        message: 'Back-end good',
+        Userid: token,
+        Password: users[0].password,
+        Email: users[0].email,
+        signUpDate: users[0].signUpDate,
 
+      });
+    }
 
-
-// For Find User Name in TopNav: 
-
-// app.get('/api/get_user', (req, res) => {
-//   // const { query } = req;
-//   // const { token } = query;
-//   res.send('Hello World!')
-
-
-//   // db.find({token}).toArray(function(err,users){
-//   //   console.log(users.email);
-//   //   res.send(users.email);
-//   // })
-
-
-// });  
-
-
-//March 16 try to get user!!!
-
-
-// app.get('/api/getUser', (req, res, next) => {
-//   const { query } = req;
-//   const { token } = query;
-
-//   User.findById({
-//     _id : token
-//     },(err, users)=> {
-//       if (err){
-//         console.log('Having this err:', err);
-//         return res.send({
-//           success: false,
-//           message: 'Error: getUser has serverz error'
-//         });
-//       }
-//       else{
-//         return res.send({
-//           success: false,
-//           message: 'Found User',
-//           useremail : users[0],
-//         })
-//       }
-//     }
+  }
   
-//   )
-//   });
-//   // UserSession.find({
-//   //   _id: token,
-//   //   isDeleted : false
-//   //   // isDeleted: false
-//   // }, (err, sessions) => {
-//   //   if (err) {
-//   //     console.log(err);
-//   //     return res.send({
-//   //       success: false,
-//   //       message: 'Error: Server error'
-//   //     });
-//   //   }
-//   //   if (sessions.length != 1) {
-      
-//   //     return res.send({
-//   //       success: false,
-//   //       message: 'Error: Invalid'
-//   //     });
-//   //   } else {
-      
-//   //     return res.send({
-//   //       success: true,
-//   //       message: 'Good'
-        
-//   //     });
-    
-//   //   }
-//   // });
+  
+  )
 
-// }); 
+});
 
-// app.param('user', function (req, res, next, id) {
-//   // try to get the user details from the User model and attach it to the request object
-//   User.find(id, function (err, user) {
-//     if (err) {
-//       next(err)
-//     } else if (user) {
-//       req.user = user
-//       next()
-//     } else {
-//       next(new Error('failed to load user'))
-//     }
-//   })
-// })
+
+
+
 
 
 // append /api for our http requests

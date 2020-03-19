@@ -1,16 +1,32 @@
+//This is my login page 
 import React, { Component } from "react";
+// import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import Home from './Home';
-import 'whatwg-fetch';
-import Signup from './Signup';
-import { useHistory } from 'react-router-dom';
-// For verify token =: 
+// For verify token, import setInStorage
 import {
   setInStorage,
-  getFromStorage,
 } from '../utils/storage';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Container';
 
+const p1Style = {
+  fontSize: '25px',
+  textAlign: 'center',
+  color: '#F7649D',
+  fontfamily: 'Roboto Slab',
+  margin: "8px",
+  border: '2px solid pink',
+  width: '100%',
+  // align: 'center',
+  
+};
+const DivStyle = {
+  display: 'flex',  
+  justifyContent:'center',
+   alignItems:'center',
+};
 
 class LoginPage extends Component {
   constructor() {
@@ -21,7 +37,7 @@ class LoginPage extends Component {
       signInError: '',
       signInEmail: '',
       signInPassword: '',
-      redirect : false,
+      redirect: false,
     };
 
     this.onTextboxChangeSignInEmail = this.onTextboxChangeSignInEmail.bind(this);
@@ -29,6 +45,8 @@ class LoginPage extends Component {
 
     this.onSignIn = this.onSignIn.bind(this);
   }
+
+  //Fuction for change this.state.redirect:
 
   setRedirect = () => {
     this.setState({
@@ -40,16 +58,12 @@ class LoginPage extends Component {
       window.location.href = "/";
     }
   }
-
-  // Functions starting from here: 
-
-
+  // For register tetxt and change states: 
   onTextboxChangeSignInEmail(event) {
     this.setState({
       signInEmail: event.target.value,
     });
   }
-
   onTextboxChangeSignInPassword(event) {
     this.setState({
       signInPassword: event.target.value,
@@ -86,14 +100,14 @@ class LoginPage extends Component {
       .then(json => {
         console.log('json', json);
         if (json.success) {
-            setInStorage('the_main_app', { token: json.token });
+          setInStorage('the_main_app', { token: json.token });
           this.setState({
             signInError: json.message,
             isLoading: false,
             signInPassword: '',
             signInEmail: '',
             token: json.token,
-            redirect : true,
+            redirect: true,
           });
         } else {
           this.setState({
@@ -112,52 +126,70 @@ class LoginPage extends Component {
       signInPassword,
     } = this.state;
     if (isLoading) {
-      return (<div><p>Loading...</p></div>);
+      return (<div><p style={p1Style}>Still loading...please wait</p></div>);
     }
     if (!token) {
       return (
-        <div>
-          <div>
-            {
-              (signInError) ? (
-                <p>{signInError}</p>
-              ) : (null)
-            }
-            <p>Sign In Page -- sample </p>
-            <div>
-            <button onClick={() => {
-              window.location.href = "/Signup";
-            }}>
-              New Customer 
-            </button>
-            </div>
-            <input
-              type="email"
-              placeholder="Email"
-              value={signInEmail}
-              onChange={this.onTextboxChangeSignInEmail}
-            />
-            <br />
-            <input
-              type="password"
-              placeholder="Password"
-              value={signInPassword}
-              onChange={this.onTextboxChangeSignInPassword}
-            />
-            <br />
-            <Switch>
-              <Route exact path='/' component={Home} />
-              <button onClick={this.onSignIn}>Sign In</button>
-            </Switch>
-          </div>
-          <br />
-          <br />
-        </div>
+        
+            <form style = {DivStyle}> 
+              <div className='containers'>
+                <div>
+                  {
+                    (signInError) ? (
+                      <p>{signInError}</p>
+                    ) : (null)
+                  }
+                  <p style={p1Style}>Sign In</p>
+                  {/* <div>
+              <button onClick={() => {
+                window.location.href = "/Signup";
+              }}>
+                New Customer 
+              </button>
+              </div> */}
+                  <div className="form-group">
+                    <label>Email address</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      placeholder="Enter email"
+                      value={signInEmail}
+                      onChange={this.onTextboxChangeSignInEmail}
+                    />
+                  </div>
+                  <br />
+                  <div className="form-group">
+                    <label>Password</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      placeholder="Enter password"
+                      value={signInPassword}
+                      onChange={this.onTextboxChangeSignInPassword}
+                    />
+                  </div>
+                  <br />
+                  <Switch>
+                    <Route exact path='/' component={Home} />
+                    <button className="btn btn-primary btn-block" onClick={this.onSignIn}>Sign In</button>
+                  </Switch>
+                  <p className="forgot-password text-right">
+                    Forgot <a href="/Forget password">password?</a>
+                  </p>
+                  <p className="forgot-password text-right">
+                    Do not have an account? Please <a href="/Signup">Sign up</a>
+                  </p>
+                </div>
+                <br />
+                <br />
+              </div>
+            </form>
+        
       );
     }
-    return (
-      <div>
-        <p>Signed in</p>
+    else return (
+      <div className="container">
+        <p>Already Signed in</p>
         {window.location.href = "/"}
       </div>
     );

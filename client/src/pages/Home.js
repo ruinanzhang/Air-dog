@@ -4,7 +4,6 @@ import Promotion from './Promotion';
 import 'whatwg-fetch';
 
 import {
-  setInStorage,
   getFromStorage,
 } from '../utils/storage';
 
@@ -27,9 +26,8 @@ class Home extends Component {
 
     this.state = {
       isLoading: true,
-      token: '',
-      rightToken : false,
-      // username: "",
+      // token: '',
+      rightToken : false
     };
   }
 
@@ -45,17 +43,18 @@ class Home extends Component {
           if (json.success) {
             this.setState({
               isLoading: false,
-              rightToken : true 
+              rightToken : true,
             });
           } else {
             this.setState({
               isLoading: false,
+              rightToken : false
             });
           }
         });
     } else {
       this.setState({
-        isLoading: false,
+        isLoading: true,
       });
     }
   }
@@ -64,7 +63,6 @@ class Home extends Component {
   render() {
     const {
       isLoading,
-      token,
       rightToken
  } = this.state;
    if (rightToken){
@@ -89,14 +87,15 @@ class Home extends Component {
       </div>
     );
 
-   }else if (!rightToken){
+   }else if (!rightToken && !isLoading){
      return (
       <div>
-        <p>Can't get right token </p>
-      {/* {window.location.href = "/Login"} */}
+      {window.location.href = "/Login"}
       </div>
    
      );
+   }else if (isLoading){
+     return (<p style = {p1Style}> Still loading</p>)
    }
     
   }
