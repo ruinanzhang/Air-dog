@@ -15,6 +15,17 @@ const UserSessionSchema = new mongoose.Schema({
   isDeleted: {
     type: Boolean,
     default: false
+  },
+  password : {
+    type: String,
+    default: ''
+  },
+  signUpDate: {
+    type: Date,
+    default: Date.now()
   }
+
+
+  
 });
 module.exports = mongoose.model('UserSession', UserSessionSchema);

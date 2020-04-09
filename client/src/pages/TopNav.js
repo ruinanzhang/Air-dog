@@ -1,9 +1,17 @@
 // This is my top nav bar for the website
 import React, { Component } from "react";
+
+import { Route, Switch } from 'react-router-dom';
+import Home from './Home';
+
 import {
     getFromStorage
 } from '../utils/storage';
 import 'whatwg-fetch';
+
+
+
+
 
 
 const p1Style = {
@@ -27,83 +35,105 @@ class TopNav extends Component {
             token: '',
             rightToken: false,
             myusername: '',
+            isRefresh: false,
         }
-    }
-    // // This is for log out 
-    // logout() {
-    //     this.setState({
-    //       isLoading: true,
-    //     });
-    //     const obj = getFromStorage('the_main_app');
-    //     if (obj && obj.token) {
-    //       const { token } = obj;
-    //       // Verify token
-    //       fetch('/api/account/logout?token=' + token)
-    //         .then(res => res.json())
-    //         .then(json => {
-    //           if (json.success) {
-    //             this.setState({
-    //               token: '',
-    //               isLoading: false
-    //             });
-    //           } else {
-    //             this.setState({
-    //               isLoading: false,
-    //             });
-    //           }
-    //         });
-    //     } else {
-    //       this.setState({
-    //         isLoading: false,
-    //       });
-    //     }
-    //   }
 
-    componentDidMount() {
+        this.onLogout = this.onLogout.bind(this);
+    }
+    // This is for log out 
+    onLogout() {
+        this.setState({
+            isLoading: true,
+        });
         const obj = getFromStorage('the_main_app');
         if (obj && obj.token) {
             const { token } = obj;
             // Verify token
-            fetch('/api/verify_user?token=' + token)
+            fetch('/api/account/logout?token=' + token)
                 .then(res => res.json())
                 .then(json => {
-                    console.log(json);
                     if (json.success) {
                         this.setState({
+                            token: '',
                             isLoading: false,
-                            rightToken: true,
-                            myusername: json.useremail
                         });
+                        window.location.href="/";
                     } else {
-                        console.log(json);
                         this.setState({
                             isLoading: false,
-                            rightToken: false
-                        })
+                        });
                     }
                 });
+        } else {
+            this.setState({
+                isLoading: false,
+            });
         }
     }
 
 
-    render() {
-        const {
-            isLoading,
-            token,
-            rightToken,
-            myusername
 
-        } = this.state;
-        if (rightToken) {
-            return (
-                <div style={p1Style}>Hi {this.state.myusername}, what do you want to get for your doggie today?</div>
-            );
-        }
-        else {
-            return (
-                <div>Not logged in </div>
-            );
-        }
+
+
+componentDidMount() {
+    const obj = getFromStorage('the_main_app');
+    if (obj && obj.token) {
+        const { token } = obj;
+        // Verify token
+        fetch('/api/verify_user?token=' + token)
+            .then(res => res.json())
+            .then(json => {
+                console.log(json);
+                if (json.success) {
+                    this.setState({
+                        isLoading: false,
+                        rightToken: true,
+                        myusername: json.useremail
+                    });
+                } else {
+                    console.log(json);
+                    this.setState({
+                        isLoading: false,
+                        rightToken: false
+                    })
+                }
+            });
     }
+}
+
+
+
+render() {
+    const {
+        isLoading,
+        token,
+        rightToken,
+        myusername,
+        isRefresh,
+
+    } = this.state;
+    if (rightToken) {
+        return (
+            <div style={p1Style}>Hi {this.state.myusername}, what do you want to get for your doggie today?
+                
+                <button variant="primary" onClick={this.onLogout}>Log out</button>
+       
+                
+               
+                {/* <Button variant="outline-primary" onClick={this.onLogout}>Primary</Button>{' '} */}
+
+                {/* <Button ariant="outline-primary" onClick={this.onLogout}> */}
+               
+               {/* </Button> */}
+            </div>
+        );
+    }
+    else {
+        return (
+            <div>Not logged in </div>
+        );
+    };;
+
+}
 }
 export default TopNav;

@@ -115,7 +115,8 @@ app.get('/api/account/logout', (req, res, next) => {
     isDeleted: false
   }, {
     $set: {
-      isDeleted:true
+      isDeleted: true,
+      token:""
     }
   }, null, (err, sessions) => {
     if (err) {
@@ -231,7 +232,7 @@ app.post('/api/signin', (req, res, next) => {
     });
   }
   email = email.toLowerCase();
-  email = email.trim();
+  // email = email.trim();
   User.find({
     email: email
   }, (err, users) => {
@@ -245,20 +246,22 @@ app.post('/api/signin', (req, res, next) => {
     if (users.length != 1) {
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: Invalid user'
       });
     }
     const user = users[0];
     if (!user.validPassword(password)){
       return res.send({
         success: false,
-        message: 'Error: Invalid'
+        message: 'Error: Invalid pwd'
       });
     }
     // Otherwise correct user
     const userSession = new UserSession();
     userSession.userId = user._id;
     userSession.email = user.email;
+    userSession.password = user.password;
+    userSession.signUpDate = user.signUpDate;
     userSession.save((err, doc) => {
       if (err) {
         console.log(err);
@@ -283,9 +286,9 @@ app.get('/api/getAccount',(req,res,next) =>{
    token
   } = query;
   console.log(token);
-  User.find({
-    email: token,
-  },(err,users) =>{
+  UserSession.find({
+    _id: token,
+  },(err,sessions) =>{
     if (err){
       console.log(err);
       return res.send({
@@ -293,21 +296,21 @@ app.get('/api/getAccount',(req,res,next) =>{
         message: 'Error: Server error'
       });
     }
-    if (users.length != 1) {
-      console.log(users);
+    if (sessions.length != 1) {
+      console.log(sessions);
       return res.send({
         success: false,
         message: 'Error: Invalid'
       });
     }else {
-      console.log(users);
+      console.log(sessions);
       return res.send({
         success: true,
         message: 'Back-end good',
         Userid: token,
-        Password: users[0].password,
-        Email: users[0].email,
-        signUpDate: users[0].signUpDate,
+        password: sessions[0].password,
+        signUpDate: sessions[0].signUpDate,
+        Email: sessions[0].email,
 
       });
     }
