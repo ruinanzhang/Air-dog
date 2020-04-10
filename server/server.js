@@ -50,6 +50,9 @@ app.post('/api/signup', (req, res, next) => {
   let {
     email
   } = body;
+  let {
+    username
+  } = body;
   
   if (!email) {
     return res.send({
@@ -61,6 +64,12 @@ app.post('/api/signup', (req, res, next) => {
     return res.send({
       success: false,
       message: 'Error: Password cannot be blank.'
+    });
+  }
+  if (!username) {
+    return res.send({
+      success: false,
+      message: 'Error: Username cannot be blank.'
     });
   }
   email = email.toLowerCase();
@@ -86,6 +95,7 @@ app.post('/api/signup', (req, res, next) => {
     const newUser = new User();
     newUser.email = email;
     newUser.password = newUser.generateHash(password);
+    newUser.username = username;
     newUser.save((err, user) => {
       if (err) {
         return res.send({
@@ -262,6 +272,7 @@ app.post('/api/signin', (req, res, next) => {
     userSession.email = user.email;
     userSession.password = user.password;
     userSession.signUpDate = user.signUpDate;
+    userSession.username = user.username;
     userSession.save((err, doc) => {
       if (err) {
         console.log(err);
@@ -311,6 +322,7 @@ app.get('/api/getAccount',(req,res,next) =>{
         password: sessions[0].password,
         signUpDate: sessions[0].signUpDate,
         Email: sessions[0].email,
+        username: sessions[0].username,
 
       });
     }
@@ -328,6 +340,7 @@ app.get('/api/getAccount',(req,res,next) =>{
 
 
 // append /api for our http requests
+
 app.use('/api', router);
 
 

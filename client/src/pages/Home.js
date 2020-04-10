@@ -65,36 +65,29 @@ class Home extends Component {
       isLoading,
       rightToken
  } = this.state;
-   if (rightToken){
+   if (!isLoading){
     return (
       <div className="App">
         <TopNav/>
         <NavbarPage />
         <div>
-        <h1 style = {p1Style}>Welcom to Doggie Style!!</h1>
-        {/* <div>
-          {this.token}
-        </div> */}
+        <h1 style = {p1Style}>Welcom to AirDog!!</h1>
+      
         </div>
         <Promotion />
-        {/* <h1>Project Home,this is a test!!!!!nanako!!!!</h1> */}
-        {/* Link to List.js */}
-        {/* <Link to={'./list'}>
-          <button variant="raised">
-              My List
-          </button>
-        </Link> */}
       </div>
     );
 
-   }else if (!rightToken && !isLoading){
-     return (
-      <div>
-      {window.location.href = "/Login"}
-      </div>
+   }
+  //  else if (!rightToken && !isLoading){
+  //    return (
+  //     <div>
+  //     {window.location.href = "/Login"}
+  //     </div>
    
-     );
-   }else if (isLoading){
+  //    );
+  //  }
+   else if (isLoading){
      return (<p style = {p1Style}> Still loading</p>)
    }
     

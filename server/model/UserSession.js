@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
 const UserSessionSchema = new mongoose.Schema({
+  username:{
+    type: String,
+    default: ''
+  },
   userId: {
     type: String,
     default: ''
