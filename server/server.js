@@ -25,6 +25,8 @@ mongoose.connect(dbRoute, { useNewUrlParser: true })
 
 let db = mongoose.connection;
 
+
+
 db.once('open', () => console.log('connected to the database'));
 
 // checks if connection with the database is successful
@@ -35,6 +37,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger('dev'));
+
+mongoose.set('useFindAndModify', false);
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -334,7 +338,73 @@ app.get('/api/getAccount',(req,res,next) =>{
 
 });
 
-
+// For update account info: 
+app.post('/api/update', (req, res, next) => {
+  // Get const 
+  
+  const { body } = req;
+  const {
+    password
+  } = body;
+  let {
+    email
+  } = body;
+  let {
+    username
+  } = body;
+ 
+  
+  if (!email) {
+    return res.send({
+      success: false,
+      message: 'Error: Email cannot be blank.'
+    });
+  }
+  if (!password) {
+    return res.send({
+      success: false,
+      message: 'Error: Password cannot be blank.'
+    });
+  }
+  if (!username) {
+    return res.send({
+      success: false,
+      message: 'Error: Username cannot be blank.'
+    });
+  }
+  email = email.toLowerCase();
+  email = email.trim();
+  // ?token=test
+  // Verify the token is one of a kind and it's not deleted.
+  User.findOneAndUpdate({
+    email: email
+  }, {
+    $set: {
+      username : username,
+      password : password, 
+    }
+  }, null, (err, matchuser) => {
+    if (err) {
+      console.log(err);
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+    if (matchuser == 0){
+      return res.send({
+        success: true,
+        message: 'matchuser == 0'
+      });
+    }else{
+      return res.send({
+        success: true,
+        message: 'Good'
+      });
+    }
+   
+  });
+});
 
 
 
@@ -342,6 +412,7 @@ app.get('/api/getAccount',(req,res,next) =>{
 // append /api for our http requests
 
 app.use('/api', router);
+
 
 
 // launch our backend into a port

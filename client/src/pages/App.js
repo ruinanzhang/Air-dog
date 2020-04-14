@@ -10,6 +10,7 @@ import LoginPage from './Login';
 import Signup from './Signup';
 
 import MyAccount from './MyAccount';
+import Testpage from './Testpage';
 
 
 class App extends Component {
@@ -25,6 +26,7 @@ class App extends Component {
           <Route path='/NavBar' component={NavbarPage}/>
           <Route path='/Login' component={LoginPage}/>
           <Route path='/Signup' component={Signup}/>
+          <Route path='/Testpage' component={Testpage}/>
           
           <Route path='/MyAccount' component={MyAccount}/>
         </Switch>
