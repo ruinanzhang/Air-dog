@@ -32,32 +32,6 @@ const DivStyle = {
     alignItems: 'center',
 };
 
-// function Edit() {
-//     // State for the input
-//     const [text, setVal] = useState("");
-
-//     /*
-//       Enclose the input element as the children to the Editable component to make it as inline editable.
-//     */
-//     return (
-
-//         <Editable
-//             text={text}
-//             placeholder="Write a task name"
-//             type="input"
-//         >
-//             <input
-//                 type="text"
-//                 name="task"
-//                 placeholder="Write a task name"
-//                 value={text}
-//                 onChange={e => setVal(e.target.value)}
-//             />
-//         </Editable>
-//     );
-// }
-
-
 
 class MyAccount extends Component {
     //     // Initialize the state

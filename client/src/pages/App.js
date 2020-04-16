@@ -11,6 +11,7 @@ import Signup from './Signup';
 
 import MyAccount from './MyAccount';
 import Testpage from './Testpage';
+import ProfilePage from './ProfilePage';
 
 
 class App extends Component {
@@ -27,6 +28,7 @@ class App extends Component {
           <Route path='/Login' component={LoginPage}/>
           <Route path='/Signup' component={Signup}/>
           <Route path='/Testpage' component={Testpage}/>
+          <Route path='/Profile' component={ProfilePage}/>
           
           <Route path='/MyAccount' component={MyAccount}/>
         </Switch>

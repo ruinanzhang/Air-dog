@@ -12,6 +12,7 @@ const router = express.Router();
 //  Import User: 
 const User = require('./model/user');
 const UserSession = require('./model/UserSession');
+const ProfileSession = require('./model/Profile');
 
 
 // Developed connection to MongoDB: 
@@ -20,8 +21,8 @@ const dbRoute =
 
 // connects our back end code with the database
 mongoose.connect(dbRoute, { useNewUrlParser: true })
-.then(() => console.log("MongoDb connected"))
-.catch(err => console.log(err));
+  .then(() => console.log("MongoDb connected"))
+  .catch(err => console.log(err));
 
 let db = mongoose.connection;
 
@@ -43,6 +44,41 @@ mongoose.set('useFindAndModify', false);
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
+app.get('/api/verify', (req, res, next) => {
+  // Get the token
+  const { query } = req;
+  const { token } = query;
+  // ?token=test
+  // Verify the token is one of a kind and it's not deleted.
+  UserSession.find({
+    _id: token,
+    isDeleted : false
+    // isDeleted: false
+  }, (err, sessions) => {
+    if (err) {
+      console.log(err);
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+    if (sessions.length != 1) {
+      
+      return res.send({
+        success: false,
+        message: 'Error: Invalid'
+      });
+    } else {
+      
+      return res.send({
+        success: true,
+        message: 'Good'
+        
+      });
+    
+    }
+  });
+});
 
 // New addition: 
 
@@ -57,7 +93,7 @@ app.post('/api/signup', (req, res, next) => {
   let {
     username
   } = body;
-  
+
   if (!email) {
     return res.send({
       success: false,
@@ -130,7 +166,7 @@ app.get('/api/account/logout', (req, res, next) => {
   }, {
     $set: {
       isDeleted: true,
-      token:""
+      token: ""
     }
   }, null, (err, sessions) => {
     if (err) {
@@ -149,51 +185,13 @@ app.get('/api/account/logout', (req, res, next) => {
 
 // For verify token: 
 
-app.get('/api/verify', (req, res, next) => {
-  // Get the token
-  const { query } = req;
-  const { token } = query;
-  // ?token=test
-  // Verify the token is one of a kind and it's not deleted.
-  UserSession.find({
-    _id: token,
-    isDeleted : false
-    // isDeleted: false
-  }, (err, sessions) => {
-    if (err) {
-      console.log(err);
-      return res.send({
-        success: false,
-        message: 'Error: Server error'
-      });
-    }
-    if (sessions.length != 1) {
-      
-      return res.send({
-        success: false,
-        message: 'Error: Invalid'
-      });
-    } else {
-      
-      return res.send({
-        success: true,
-        message: 'Good'
-        
-      });
-    
-    }
-  });
-});
-
-
-
 app.get('/api/verify_user', (req, res, next) => {
   // Get the token
   const { query } = req;
-  const { token} = query;
-   UserSession.find({
+  const { token } = query;
+  UserSession.find({
     _id: token,
-    isDeleted : false,
+    isDeleted: false,
   }, (err, sessions) => {
     if (err) {
       // console.log(sessions);
@@ -203,7 +201,7 @@ app.get('/api/verify_user', (req, res, next) => {
       });
     }
     if (sessions.length != 1) {
-      
+
       return res.send({
         success: false,
         message: 'Error: Invalid'
@@ -215,12 +213,12 @@ app.get('/api/verify_user', (req, res, next) => {
         success: true,
         message: 'session success 2',
         useremail: sessions[0].email
-        
+
       });
     }
   });
-  
-  
+
+
 
 });
 
@@ -264,7 +262,7 @@ app.post('/api/signin', (req, res, next) => {
       });
     }
     const user = users[0];
-    if (!user.validPassword(password)){
+    if (!user.validPassword(password)) {
       return res.send({
         success: false,
         message: 'Error: Invalid pwd'
@@ -294,17 +292,144 @@ app.post('/api/signin', (req, res, next) => {
   });
 });
 
-// For getAccount information: 
-app.get('/api/getAccount',(req,res,next) =>{
+// For profile post: 
+app.post('/api/profile', (req, res, next) => {
+  // Get the token
+  const { body } = req;
+  const { email} = body;
+  let {
+    dogName
+  } = body;
+  let {
+    dogAge
+  } = body;
+  let {
+    dogBreed
+  } = body;
+  let {
+    dogPersonality
+  } = body;
+  let {
+    dogSize
+  } = body;
+  
+
+  ProfileSession.find({
+    email: email,
+  }, (err, sessions) => {
+    if (err) {
+      console.log(err);
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+    if (sessions.length == 0) {
+      //First time fill in profile page:
+      const profile = new ProfileSession();
+      profile.email = email;
+      profile.dogName = dogName;
+      profile.dogAge = dogAge;
+      profile.dogBreed = dogBreed;
+      profile.dogPersonality = dogPersonality;
+      // profile.dogPhoto = dogPhoto;
+      profile.dogSize = dogSize;
+      profile.save((err, doc) => {
+        if (err) {
+          console.log(err);
+          return res.send({
+            success: false,
+            message: 'Error: server error'
+          });
+        }
+        return res.send({
+          success: true,
+          message: 'Verifited user with profile info',
+  
+        });
+      });
+    }
+    if (sessions.length != 0){
+      return res.send({
+        success: false,
+        message: 'Already filled'
+      });
+
+    }
+    
+
+  });
+});
+
+// For get profile post: 
+
+app.get('/api/profile_page', (req, res, next) => {
+  // Get the token
   const { query } = req;
   const {
-   token
+    token
+  } = query;
+  console.log(token);
+
+  ProfileSession.find({
+    _id: token,
+  }, (err, sessions) => {
+    if (err) {
+      console.log(err);
+      return res.send({
+        success: false,
+        message: 'Error: Server error'
+      });
+    }
+    if (sessions.length == 0) {
+
+      return res.send({
+        success: false,
+        message: 'Error: Invalid is 0'
+      });
+    } 
+    if (sessions.length != 1) {
+
+      return res.send({
+        success: false,
+        message: 'Error: Invalid'
+      });
+    } 
+    
+    
+    
+    else {
+
+      console.log(sessions[0].email);
+      return res.send({
+        success: true,
+        message: 'session success 2',
+        email: sessions[0].email,
+        dogName : sessions[0].dogName,
+        dogAge : sessions[0].dogAge,
+        dogBreed : sessions[0].dogBreed,
+        dogPersonality :  sessions[0].dogPersonality,
+        dogSize : sessions[0].dogSize,
+
+      });
+    }
+  });
+
+
+
+});
+
+// For getAccount information: 
+app.get('/api/getAccount', (req, res, next) => {
+  const { query } = req;
+  const {
+    token
   } = query;
   console.log(token);
   UserSession.find({
     _id: token,
-  },(err,sessions) =>{
-    if (err){
+  }, (err, sessions) => {
+    if (err) {
       console.log(err);
       return res.send({
         success: false,
@@ -317,7 +442,7 @@ app.get('/api/getAccount',(req,res,next) =>{
         success: false,
         message: 'Error: Invalid'
       });
-    }else {
+    } else {
       console.log(sessions);
       return res.send({
         success: true,
@@ -332,8 +457,8 @@ app.get('/api/getAccount',(req,res,next) =>{
     }
 
   }
-  
-  
+
+
   )
 
 });
@@ -341,7 +466,7 @@ app.get('/api/getAccount',(req,res,next) =>{
 // For update account info: 
 app.post('/api/update', (req, res, next) => {
   // Get const 
-  
+
   const { body } = req;
   const {
     password
@@ -352,8 +477,8 @@ app.post('/api/update', (req, res, next) => {
   let {
     username
   } = body;
- 
-  
+
+
   if (!email) {
     return res.send({
       success: false,
@@ -380,8 +505,8 @@ app.post('/api/update', (req, res, next) => {
     email: email
   }, {
     $set: {
-      username : username,
-      password : password, 
+      username: username,
+      password: password,
     }
   }, null, (err, matchuser) => {
     if (err) {
@@ -391,18 +516,18 @@ app.post('/api/update', (req, res, next) => {
         message: 'Error: Server error'
       });
     }
-    if (matchuser == 0){
+    if (matchuser == 0) {
       return res.send({
         success: true,
         message: 'matchuser == 0'
       });
-    }else{
+    } else {
       return res.send({
         success: true,
         message: 'Good'
       });
     }
-   
+
   });
 });
 
