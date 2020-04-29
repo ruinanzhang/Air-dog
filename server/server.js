@@ -296,7 +296,8 @@ app.post('/api/signin', (req, res, next) => {
 app.post('/api/profile', (req, res, next) => {
   // Get the token
   const { body } = req;
-  const { email} = body;
+  let { email} = body;
+
   let {
     dogName
   } = body;
@@ -312,8 +313,15 @@ app.post('/api/profile', (req, res, next) => {
   let {
     dogSize
   } = body;
+  console.log('current email is' + email)
+  if (!email) {
+    return res.send({
+      success: false,
+      message: 'Error: Email cannot be blank.'
+    });
+  }
   
-
+  
   ProfileSession.find({
     email: email,
   }, (err, sessions) => {
@@ -367,12 +375,12 @@ app.get('/api/profile_page', (req, res, next) => {
   // Get the token
   const { query } = req;
   const {
-    token
+    email
   } = query;
-  console.log(token);
+  console.log(email);
 
   ProfileSession.find({
-    _id: token,
+    email: email,
   }, (err, sessions) => {
     if (err) {
       console.log(err);
@@ -395,9 +403,6 @@ app.get('/api/profile_page', (req, res, next) => {
         message: 'Error: Invalid'
       });
     } 
-    
-    
-    
     else {
 
       console.log(sessions[0].email);
@@ -413,6 +418,57 @@ app.get('/api/profile_page', (req, res, next) => {
 
       });
     }
+  });
+
+
+
+});
+
+app.get('/api/profile_page_2', (req, res, next) => {
+  // Get the token
+  const { query } = req;
+  const {
+    token
+  } = query;
+  console.log("email in apii/profile_page_2 is :" , token);
+
+  ProfileSession.find({
+    email:token,
+  }, (err, sessions) => {
+    if (err) {
+      console.log(err);
+      return res.send({
+        success: false,
+        message: 'Profile session Error: Server error'
+      });
+    }
+    if (sessions.length == 0) {
+
+      return res.send({
+        success: false,
+        message: 'Profile session Error: User has not filled-in profile'
+      });
+    } 
+    if (sessions.length != 1) {
+      return res.send({
+        success: false,
+        message: 'Profile session Error: Use has filled-in profile'
+      });
+    } 
+    if (sessions.length == 1){
+      return res.send({
+        success: true,
+        message: 'profile session success',
+        email: sessions[0].email,
+        dogName : sessions[0].dogName,
+        dogAge : sessions[0].dogAge,
+        dogBreed : sessions[0].dogBreed,
+        dogPersonality :  sessions[0].dogPersonality,
+        dogSize : sessions[0].dogSize,
+
+      });
+    }
+
   });
 
 

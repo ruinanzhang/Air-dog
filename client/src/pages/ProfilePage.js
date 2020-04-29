@@ -35,12 +35,12 @@ class ProfilePage extends Component {
             username: "",
             isLoading: true,
             isEditable: false,
-            PdogName: "",
-            PdogAge: "",
-            PdogBreed: "",
-            PdogPersonality: "",
-            PdogPhoto: "",
-            PdogSize: "",
+            dogName: "",
+            dogAge: "",
+            dogBreed: "",
+            dogPersonality: "",
+            dogPhoto: "",
+            dogSize: "",
             rightToken: false,
             isRefresh: false,
             profileErr: "",
@@ -57,30 +57,30 @@ class ProfilePage extends Component {
 
     onTextboxChangeDPersonality(event) {
         this.setState({
-            PdogPersonality: event.target.value,
+            dogPersonality: event.target.value,
         });
     }
 
     onTextboxChangeDAge(event) {
         this.setState({
-            PdogAge: event.target.value,
+            dogAge: event.target.value,
         });
     }
     onTextboxChangeDSize(event) {
         this.setState({
-            PdogSize: event.target.value,
+            dogSize: event.target.value,
         });
     }
 
     onTextboxChangeDBreed(event) {
         this.setState({
-            PdogBreed: event.target.value,
+            dogBreed: event.target.value,
         });
     }
 
     onTextboxChangeDName(event) {
         this.setState({
-            PdogName: event.target.value,
+            dogName: event.target.value,
         });
     }
     onVerify() {
@@ -112,28 +112,35 @@ class ProfilePage extends Component {
     onProfile() {
         // Grab state
         const {
+            dogName,
+            dogAge,
+            dogBreed,
+            dogPersonality,
+            dogSize,
             email,
-            PdogName,
-            PdogAge,
-            PdogBreed,
-            PdogPersonality,
-            PdogSize,
         } = this.state;
-
+        console.log("this: email", email);
         this.setState({
             isLoading: true,
         });
+        // this.setState({
+        //     email: "auth@123.com",
+        // });
+
 
         fetch('/api/profile', {
-            method: 'post',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
 
             body: JSON.stringify({
                 email: email,
-                dogName: PdogName,
-                dogAge: PdogAge,
-                dogBreed: PdogBreed,
-                dogPersonality: PdogPersonality,
-                dogSize: PdogSize,
+                dogName: dogName,
+                dogAge: dogAge,
+                dogBreed: dogBreed,
+                dogPersonality: dogPersonality,
+                dogSize: dogSize,
             }),
         }).then(res => res.json())
             .then(json => {
@@ -162,28 +169,30 @@ class ProfilePage extends Component {
 
     }
 
+
     onGetProfile() {
-        // Grab state
-        const obj = getFromStorage('the_main_app');
-        if (obj && obj.token) {
-            this.setState({
+        const {
+            email,
+        } = this.state;
+
+        this.setState({
                 isLoading: true,
-            });
-            const { token } = obj;
-            fetch('/api/profile_page?token=' + token)
-                .then(res => res.json())
-                .then(json => {
+        });
+        console.log("this email in OnGetProfile", email);
+        fetch('/api/profile_page_2?token=' + email)
+            .then(res => res.json())
+            .then(json => {
                     console.log(json);
                     if (json.success) {
                         this.setState((state) => {
                             return {
                                 isLoading: false,
                                 email: json.email,
-                                PdogName: json.dogName,
-                                PdogAge: json.dogAge,
-                                PdogBreed: json.dogBreed,
-                                PdogPersonality: json.dogPersonality,
-                                PdogSize: json.dogSize,
+                                dogName: json.dogName,
+                                dogAge: json.dogAge,
+                                dogBreed: json.dogBreed,
+                                dogPersonality: json.dogPersonality,
+                                dogSize: json.dogSize,
                             }
                         });
 
@@ -193,15 +202,24 @@ class ProfilePage extends Component {
                             isLoading: true,
                         })
                     }
-                })
-        }
+            })
+        
 
     }
+
+    
 
     componentDidMount() {
-        this.onVerify();
-        this.onGetProfile();
+        this.onVerify()
+        console.log("componentDidMount", this.state)
+        
     }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.email !== this.state.email) {
+          console.log('email state has changed.')
+          this.onGetProfile()
+        }
+      }
     render() {
         const {
             token,
@@ -210,17 +228,21 @@ class ProfilePage extends Component {
             username,
             isLoading,
             isEditable,
-            PdogName,
-            PdogAge,
-            PdogBreed,
-            PdogPersonality,
-            PdogPhoto,
-            PdogSize,
+            dogName,
+            dogAge,
+            dogBreed,
+            dogPersonality,
+            dogPhoto,
+            dogSize,
             rightToken,
             isRefresh,
             profileErr
         } = this.state;
         if (rightToken) {
+            console.log("In rightToken", this.state)
+            
+           
+
             return (
                 <div>
                     <TopNav />
@@ -228,6 +250,7 @@ class ProfilePage extends Component {
                     <MDBRow>
                         <MDBCol md="2"></MDBCol>
                         <MDBCol md="8">
+
                             <button className="square" onClick={this.onProfile}>Save</button>
                             <h1>{this.state.profileErr}</h1>
                             {/* email */}
@@ -241,13 +264,13 @@ class ProfilePage extends Component {
                                 <div style={p2Style}>Dog Name:
                                         </div>
                                 <Editable style={p2Style}
-                                    text={PdogName}
+                                    text={dogName}
                                     placeholder="Dog Name"
                                     type="text"
                                 >
                                     <input
                                         placeholder="Dog Name"
-                                        value={PdogName}
+                                        value={dogName}
                                         onChange={this.onTextboxChangeDName}
                                     />
                                 </Editable>
@@ -258,14 +281,14 @@ class ProfilePage extends Component {
                                 <div style={p2Style}>Dog Name:
                                         </div>
                                 <Editable style={p2Style}
-                                    text={PdogAge}
+                                    text={dogAge}
                                     placeholder="Dog Age"
                                     type="text"
                                 >
                                     <input
                                         type="text"
                                         placeholder="Dog Age"
-                                        value={PdogAge}
+                                        value={dogAge}
                                         onChange={this.onTextboxChangeDAge}
                                     />
                                 </Editable>
@@ -276,14 +299,14 @@ class ProfilePage extends Component {
                                 <div style={p2Style}>Dog Breed:
                                         </div>
                                 <Editable style={p2Style}
-                                    text={PdogBreed}
+                                    text={dogBreed}
                                     placeholder="Dog Breed"
                                     type="text"
                                 >
                                     <input
                                         type="text"
                                         placeholder="Dog Breed"
-                                        value={PdogBreed}
+                                        value={dogBreed}
                                         onChange={this.onTextboxChangeDBreed}
                                     />
                                 </Editable>
@@ -294,14 +317,14 @@ class ProfilePage extends Component {
                                 <div style={p2Style}>Dog Size:
                                         </div>
                                 <Editable style={p2Style}
-                                    text={PdogSize}
+                                    text={dogSize}
                                     placeholder="Dog Size"
                                     type="text"
                                 >
                                     <input
                                         type="text"
                                         placeholder="Dog Size"
-                                        value={PdogSize}
+                                        value={dogSize}
                                         onChange={this.onTextboxChangeDSize}
                                     />
                                 </Editable>
@@ -312,14 +335,14 @@ class ProfilePage extends Component {
                                 <div style={p2Style}>Dog Personality:
                                         </div>
                                 <Editable style={p2Style}
-                                    text={PdogPersonality}
+                                    text={dogPersonality}
                                     placeholder="Dog Personality"
                                     type="text"
                                 >
                                     <input
                                         type="text"
                                         placeholder="Dog Personality"
-                                        value={PdogPersonality}
+                                        value={dogPersonality}
                                         onChange={this.onTextboxChangeDPersonality}
                                     />
                                 </Editable>
