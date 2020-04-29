@@ -208,11 +208,11 @@ app.get('/api/verify_user', (req, res, next) => {
       });
     } else {
 
-      console.log(sessions[0].email);
+      console.log(sessions[0].username);
       return res.send({
         success: true,
         message: 'session success 2',
-        useremail: sessions[0].email
+        useremail: sessions[0].username
 
       });
     }
@@ -358,9 +358,37 @@ app.post('/api/profile', (req, res, next) => {
       });
     }
     if (sessions.length != 0){
-      return res.send({
-        success: false,
-        message: 'Already filled'
+      //  If user already 
+      ProfileSession.findOneAndUpdate({
+        email: email
+      }, {
+        $set: {
+          dogName: dogName,
+          dogAge: dogAge,
+          dogBreed : dogBreed,
+          dogPersonality: dogPersonality,
+          dogSize : dogSize,
+        }
+      }, null, (err, matchuser) => {
+        if (err) {
+          console.log(err);
+          return res.send({
+            success: false,
+            message: 'Error: Server error'
+          });
+        }
+        if (matchuser == 0) {
+          return res.send({
+            success: true,
+            message: 'matchuser == 0'
+          });
+        } else {
+          return res.send({
+            success: true,
+            message: 'Good'
+          });
+        }
+    
       });
 
     }
@@ -370,59 +398,6 @@ app.post('/api/profile', (req, res, next) => {
 });
 
 // For get profile post: 
-
-app.get('/api/profile_page', (req, res, next) => {
-  // Get the token
-  const { query } = req;
-  const {
-    email
-  } = query;
-  console.log(email);
-
-  ProfileSession.find({
-    email: email,
-  }, (err, sessions) => {
-    if (err) {
-      console.log(err);
-      return res.send({
-        success: false,
-        message: 'Error: Server error'
-      });
-    }
-    if (sessions.length == 0) {
-
-      return res.send({
-        success: false,
-        message: 'Error: Invalid is 0'
-      });
-    } 
-    if (sessions.length != 1) {
-
-      return res.send({
-        success: false,
-        message: 'Error: Invalid'
-      });
-    } 
-    else {
-
-      console.log(sessions[0].email);
-      return res.send({
-        success: true,
-        message: 'session success 2',
-        email: sessions[0].email,
-        dogName : sessions[0].dogName,
-        dogAge : sessions[0].dogAge,
-        dogBreed : sessions[0].dogBreed,
-        dogPersonality :  sessions[0].dogPersonality,
-        dogSize : sessions[0].dogSize,
-
-      });
-    }
-  });
-
-
-
-});
 
 app.get('/api/profile_page_2', (req, res, next) => {
   // Get the token
@@ -522,7 +497,6 @@ app.get('/api/getAccount', (req, res, next) => {
 // For update account info: 
 app.post('/api/update', (req, res, next) => {
   // Get const 
-
   const { body } = req;
   const {
     password
@@ -533,8 +507,6 @@ app.post('/api/update', (req, res, next) => {
   let {
     username
   } = body;
-
-
   if (!email) {
     return res.send({
       success: false,

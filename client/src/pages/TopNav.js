@@ -1,18 +1,16 @@
 // This is my top nav bar for the website
 import React, { Component } from "react";
+import Button from '@material-ui/core/Button';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import './Font.css'
 
-import { Route, Switch } from 'react-router-dom';
-import Home from './Home';
 
 import {
     getFromStorage
 } from '../utils/storage';
-import 'whatwg-fetch';
-
-
-
-
-
+import { styled } from '@material-ui/core/styles';
 
 const p1Style = {
     fontSize: '18px',
@@ -23,6 +21,20 @@ const p1Style = {
     border: '2px solid pink',
     width: '100%'
 };
+
+
+
+const MyGrid = styled(Grid)({
+    background: '#f0a5bd',
+    fontSize: '28px',
+    fontFamily: 'Comic Neue',
+    // border: 2,
+    // borderRadius: 3,
+    // boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    color: 'white',
+    height: 82,
+    padding: '10px 10px',
+});
 
 
 
@@ -40,6 +52,7 @@ class TopNav extends Component {
 
         this.onLogout = this.onLogout.bind(this);
     }
+
     // This is for log out 
     onLogout() {
         this.setState({
@@ -57,7 +70,7 @@ class TopNav extends Component {
                             token: '',
                             isLoading: false,
                         });
-                        window.location.href="/";
+                        window.location.href = "/";
                     } else {
                         this.setState({
                             isLoading: false,
@@ -71,6 +84,7 @@ class TopNav extends Component {
         }
     }
 
+    // Every time refresh: 
     componentDidMount() {
         const obj = getFromStorage('the_main_app');
         if (obj && obj.token) {
@@ -97,31 +111,63 @@ class TopNav extends Component {
         }
     }
 
-render() {
-    const {
-        isLoading,
-        token,
-        rightToken,
-        myusername,
-        isRefresh,
+    render() {
 
-    } = this.state;
-    if (rightToken) {
-        return (
-            <div style={p1Style}>Hi {this.state.myusername}, what do you want to get for your doggie today?
-                
-                <button className="square" onClick={this.onLogout}>Log out</button>
-            </div>
-        );
+        const {
+            isLoading,
+            token,
+            rightToken,
+            myusername,
+            isRefresh,
+
+        } = this.state;
+
+
+        if (rightToken) {
+            return (
+                <div>
+                    <Grid container spacing={3}>
+
+                        <MyGrid item xs={11}>
+
+
+                            Hello , {this.state.myusername}
+                        </MyGrid >
+                        <MyGrid 
+                            
+                            justify="flex-end"
+                            item xs={1}
+                        // alignItems="flex-start"
+                        >
+
+                            <Button
+                                variant="outlined"
+                                color= 'inherit'
+                                size="small"
+
+                                onClick={this.onLogout}>Log out</Button>
+
+                        </MyGrid>
+
+
+
+
+                    </Grid>
+
+                    {/* <button className="square" onClick={this.onLogout}>Log out</button> */}
+                </div>
+            );
+        }
+        else {
+            return (
+                <div style={p1Style}>
+                    <Container>
+                        <div>Hey you, please log in!</div><a className="variant" href="/Login">Log in</a>
+                    </Container>
+                </div>
+            );
+        };;
+
     }
-    else {
-        return (
-            <div style={p1Style}>
-                <div>Hey you, please log in!</div><a className="variant" href="/Login">Log in</a>
-            </div>
-        );
-    };;
-
-}
 }
 export default TopNav;

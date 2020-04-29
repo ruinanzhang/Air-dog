@@ -100,23 +100,23 @@ class NavbarPage extends Component {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav mr-auto">
                             <li className="nav-item active">
-                                <a className="nav-link" href="#" style={p1Style}>Shop <span className="sr-only">(current)</span></a>
+                                <a className="nav-link" href="#" style={p1Style}>Post<span className="sr-only">(current)</span></a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#" style={p1Style}>Sell</a>
+                                <a className="nav-link" href="#" style={p1Style}>Search</a>
                             </li>
 
                             <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style={p1Style} onClick={this.showOrderMenu}>
-                                    Orders/Items</a>
+                                    Your Posts</a>
                                 {
                                     this.state.showOrderMenu
                                         ? (
                                             <div className="dropdown-menu" aria-labelledby="navbarDropdown" style={p1Style}>
-                                                <a className="dropdown-item" href="#">My Orders</a>
-                                                <a className="dropdown-item" href="#">My Items</a>
+                                                <a className="dropdown-item" href="#">Pending Posts</a>
+                                                <a className="dropdown-item" href="#">All Posts</a>
                                                 <div className="dropdown-divider"></div>
-                                                <a className="dropdown-item" href="#">My Returns</a>
+                                                <a className="dropdown-item" href="#">Past Posts</a>
                                             </div>
                                         )
                                         : (null)
@@ -128,15 +128,19 @@ class NavbarPage extends Component {
                     </div>
                     <nav className="navbar navbar-expand-lg navbar-light bg-light">
                         <li className="nav-item">
-                            <a className="nav-link" href="/Account" style={p1Style}>MyAccount</a>
+                            <a className="nav-link" href="/MyAccount" style={p1Style}>My Account</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/Profile" style={p1Style}>My Doggie's Profile</a>
                         </li>
                         <li className="nav-item dropdown" >
-                            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style={p1Style} onClick={this.showCartMenu}>My shopping Cart</a>
+                            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style={p1Style} onClick={this.showCartMenu}>Request</a>
                             {
                                 this.state.showCartMenu
                                     ? (
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdown" style={p1Style}>
-                                            <a className="dropdown-item" href="#">First Item</a>
+                                            <a className="dropdown-item" href="#">New Request</a>
+                                            <a className="dropdown-item" href="#">All Requests</a>
 
                                         </div>
                                     )
