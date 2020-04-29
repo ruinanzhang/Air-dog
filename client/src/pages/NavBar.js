@@ -3,20 +3,45 @@ import React, { Component } from "react";
 import {
     getFromStorage
 } from '../utils/storage';
+import './Font.css'
+import Button from '@material-ui/core/Button';
 
 
-// import 'bootstrap/dist/css/bootstrap.min.css';
 const p1Style = {
-    fontSize: '15px',
-    textAlign: 'center',
-    color: '#F7649D',
-    fontfamily: 'Roboto Slab',
+    fontSize: '20px',
+    // textAlign: 'center',
+    fontFamily: 'Comic Neue',
+    color : '#f0a5bd',
     // margin:"8px",
-    // width : '10%',
-    display: 'inline-flex',
-    backgroundcolor: 'blue'
+    // width : '100%'
+  };
 
-};
+const NavStyle = {
+    backgroundcolor: '#e3f2fd'
+}
+
+const TogStyle = {
+    fontSize: '20px',
+    backgroundcolor: '#e3f2fd',
+    textAlign: 'center',
+    color: '#f0a5bd',
+    fontFamily: 'Comic Neue',
+    display: 'inline-flex',
+}
+
+const SearchStyle = {
+    backgroundcolor: '#e3f2fd',
+    fontSize: '20px',
+    fontFamily: 'Comic Neue',
+    color : '#f0a5bd',
+}
+
+const ButtonStyle ={
+    fontSize: '18px',
+    fontFamily: 'Comic Neue',
+    color : '#f0a5bd',
+}
+
 class NavbarPage extends Component {
     constructor() {
         super();
@@ -58,7 +83,6 @@ class NavbarPage extends Component {
             })
         }
     }
-
     showOrderMenu(event) {
         event.preventDefault();
 
@@ -90,138 +114,99 @@ class NavbarPage extends Component {
         } = this.state;
         if (!isLoading) {
             if (rightToken) {
-                return ( <div className="justify-content-center">
-                <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                    <a className="navbar-brand" href="#" style={p1Style}>DoddgieStyle.com</a>
-                    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul className="navbar-nav mr-auto">
-                            <li className="nav-item active">
-                                <a className="nav-link" href="#" style={p1Style}>Post<span className="sr-only">(current)</span></a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#" style={p1Style}>Search</a>
-                            </li>
-
-                            <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style={p1Style} onClick={this.showOrderMenu}>
-                                    Your Posts</a>
-                                {
-                                    this.state.showOrderMenu
-                                        ? (
-                                            <div className="dropdown-menu" aria-labelledby="navbarDropdown" style={p1Style}>
-                                                <a className="dropdown-item" href="#">Pending Posts</a>
-                                                <a className="dropdown-item" href="#">All Posts</a>
-                                                <div className="dropdown-divider"></div>
-                                                <a className="dropdown-item" href="#">Past Posts</a>
-                                            </div>
-                                        )
-                                        : (null)
-                                }
-
-                            </li>
-                        </ul>
-
-                    </div>
-                    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                        <li className="nav-item">
-                            <a className="nav-link" href="/MyAccount" style={p1Style}>My Account</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="/Profile" style={p1Style}>My Doggie's Profile</a>
-                        </li>
-                        <li className="nav-item dropdown" >
-                            <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style={p1Style} onClick={this.showCartMenu}>Request</a>
-                            {
-                                this.state.showCartMenu
-                                    ? (
-                                        <div className="dropdown-menu" aria-labelledby="navbarDropdown" style={p1Style}>
-                                            <a className="dropdown-item" href="#">New Request</a>
-                                            <a className="dropdown-item" href="#">All Requests</a>
-
-                                        </div>
-                                    )
-                                    : (null)
-                            }
-
-
-                        </li>
-
-
-
-                    </nav>
-                </nav>
-
-
-            </div>
-        );
-            } else {
                 return (
                     <div className="justify-content-center">
-                        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                            <a className="navbar-brand" href="#" style={p1Style}>DoddgieStyle.com</a>
-                            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                                <span className="navbar-toggler-icon"></span>
-                            </button>
-
+                        <nav className="navbar  navbar-expand-lg navbar-light" style={NavStyle}>
+                            <a className="navbar-brand" href="/" style={p1Style}>AirDooog.com</a>
+                            <a className="nav-link" href="#" style={p1Style}>Posts<span className="sr-only">(current)</span></a>
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
                                 <ul className="navbar-nav mr-auto">
-                                    <li className="nav-item active">
-                                        <a className="nav-link" href="#" style={p1Style}>Shop <span className="sr-only">(current)</span></a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="#" style={p1Style}>Sell</a>
-                                    </li>
-
                                     <li className="nav-item dropdown">
                                         <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style={p1Style} onClick={this.showOrderMenu}>
-                                            Orders/Items</a>
+                                            Your Posts</a>
                                         {
                                             this.state.showOrderMenu
                                                 ? (
-                                                    <div className="dropdown-menu" aria-labelledby="navbarDropdown" style={p1Style}>
-                                                        <a className="dropdown-item" href="#">My Orders</a>
-                                                        <a className="dropdown-item" href="#">My Items</a>
-                                                        <div className="dropdown-divider"></div>
-                                                        <a className="dropdown-item" href="#">My Returns</a>
+                                                    <div className="dropdown-menu" aria-labelledby="navbarDropdown" style={TogStyle}>
+                                                        <a className="dropdown-item" href="#" style={TogStyle}> Pending Posts</a>
+                                                        <a className="dropdown-item" href="#" style={TogStyle}>All Posts</a>
+                                                        <div className="dropdown-divider" style={TogStyle}></div>
+                                                        <a className="dropdown-item" href="#" style={TogStyle}>Past Posts</a>
                                                     </div>
                                                 )
                                                 : (null)
                                         }
-
                                     </li>
                                 </ul>
-
                             </div>
-                            <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                                <li className="nav-item">
-                                    <a className="nav-link" href="/Login" style={p1Style}>Login</a>
-                                </li>
-                                <li className="nav-item dropdown" >
-                                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style={p1Style} onClick={this.showCartMenu}>My shopping Cart</a>
-                                    {
-                                        this.state.showCartMenu
-                                            ? (
-                                                <div className="dropdown-menu" aria-labelledby="navbarDropdown" style={p1Style}>
-                                                    <a className="dropdown-item" href="#">First Item</a>
-
-                                                </div>
-                                            )
-                                            : (null)
-                                    }
-
-
-                                </li>
-
-
-
+                            <nav className="navbar  navbar-expand-lg navbar-light" style={NavStyle}>
+                                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                                    <ul className="navbar-nav mr-auto">
+                                        <a className="nav-link" href="/MyAccount" style={p1Style}>My Account<span className="sr-only">(current)</span></a>
+                                        <a className="nav-link" href="/Profile" style={p1Style}>Dog Profile<span className="sr-only">(current)</span></a>
+                                        <a className="nav-link" href="#" style={p1Style}>  <span className="sr-only">(current)</span></a>
+                                    </ul>
+                                    <form class="form-inline my-2 my-lg-0">
+                                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style={SearchStyle}></input>
+                                        <Button
+                                            variant="outlined"
+                                            color='white'
+                                            size="medium"
+                                            style = {ButtonStyle}
+                                        // href="/Login"
+                                        >Search</Button>
+                                    </form>
+                                </div>
                             </nav>
                         </nav>
-
-
+                    </div>
+                );
+            } else {
+                return (
+                    <div className="justify-content-center">
+                        <nav className="navbar  navbar-expand-lg navbar-light" style={NavStyle}>
+                            <a className="navbar-brand" href="/" style={p1Style}>AirDooog.com</a>
+                            <a className="nav-link" href="#" style={p1Style}>Posts<span className="sr-only">(current)</span></a>
+                            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul className="navbar-nav mr-auto">
+                                    <li className="nav-item dropdown">
+                                        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false" style={p1Style} onClick={this.showOrderMenu}>
+                                            Your Posts</a>
+                                        {
+                                            this.state.showOrderMenu
+                                                ? (
+                                                    <div className="dropdown-menu" aria-labelledby="navbarDropdown" style={TogStyle}>
+                                                        <a className="dropdown-item" href="/Login" style={TogStyle}>Pending Posts</a>
+                                                        <a className="dropdown-item" href="/Login" style={TogStyle}>All Posts</a>
+                                                        <div className="dropdown-divider" style={TogStyle}></div>
+                                                        <a className="dropdown-item" href="/Login" style={TogStyle}>Past Posts</a>
+                                                    </div>
+                                                )
+                                                : (null)
+                                        }
+                                    </li>
+                                </ul>
+                            </div>
+                            <nav className="navbar  navbar-expand-lg navbar-light" style={NavStyle}>
+                                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                                    <ul className="navbar-nav mr-auto">
+                                        <a className="nav-link" href="/Login" style={p1Style}>My Account<span className="sr-only">(current)</span></a>
+                                        <a className="nav-link" href="/Login" style={p1Style}>Dog Profile<span className="sr-only">(current)</span></a>
+                                        <a className="nav-link" href="#" style={p1Style}>  <span className="sr-only">(current)</span></a>
+                                    </ul>
+                                    <form class="form-inline my-2 my-lg-0">
+                                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style={SearchStyle}></input>
+                                        <Button
+                                            style = {ButtonStyle}
+                                            variant="outlined"
+                                            color='white'
+                                            size="medium"
+                                        // href="/Login"
+                                        >Search</Button>
+                                    </form>
+                                </div>
+                            </nav>
+                        </nav>
                     </div>
                 );
             }

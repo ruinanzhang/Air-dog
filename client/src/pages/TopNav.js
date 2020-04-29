@@ -8,6 +8,14 @@ import {
 } from '../utils/storage';
 import { styled } from '@material-ui/core/styles';
 
+// import logo from '../pics/logo.svg';
+
+
+const ButtonStyle ={
+    fontSize: '18px',
+    fontFamily: 'Comic Neue',
+    color : 'white',
+}
 
 const MyGrid = styled(Grid)({
     background: '#f0a5bd',
@@ -117,6 +125,7 @@ class TopNav extends Component {
                                 variant="outlined"
                                 color='inherit'
                                 size="small"
+                                style = {ButtonStyle}
                                 onClick={this.onLogout}>Log out</Button>
                         </MyGrid>
                     </Grid>
@@ -128,9 +137,11 @@ class TopNav extends Component {
                 <div >
                     <Grid container spacing={3}>
                         <MyGrid item xs={12}>
+                            {/* <img src={logo} style={logoStyle}></img> */}
                             Welcome to AirDog!  Please  
                             <a>  </a>
                             <Button
+                                style = {ButtonStyle}
                                 variant="outlined"
                                 color='inherit'
                                 size="small"
