@@ -1,42 +1,23 @@
 // This is my top nav bar for the website
 import React, { Component } from "react";
 import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import './Font.css'
-
-
 import {
     getFromStorage
 } from '../utils/storage';
 import { styled } from '@material-ui/core/styles';
-
-const p1Style = {
-    fontSize: '18px',
-    textAlign: 'center',
-    color: '#F7649D',
-    fontfamily: 'Roboto Slab',
-    margin: "2px",
-    border: '2px solid pink',
-    width: '100%'
-};
-
 
 
 const MyGrid = styled(Grid)({
     background: '#f0a5bd',
     fontSize: '28px',
     fontFamily: 'Comic Neue',
-    // border: 2,
-    // borderRadius: 3,
-    // boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
     color: 'white',
-    height: 82,
-    padding: '10px 10px',
+    height: 70,
+    padding: '20px 50px',
+    textAlign: 'left',
 });
-
-
 
 class TopNav extends Component {
     constructor() {
@@ -112,7 +93,6 @@ class TopNav extends Component {
     }
 
     render() {
-
         const {
             isLoading,
             token,
@@ -121,49 +101,42 @@ class TopNav extends Component {
             isRefresh,
 
         } = this.state;
-
-
         if (rightToken) {
             return (
                 <div>
                     <Grid container spacing={3}>
-
                         <MyGrid item xs={11}>
-
-
-                            Hello , {this.state.myusername}
+                            Hello, {this.state.myusername} ! Welcome to AirDog :)
                         </MyGrid >
-                        <MyGrid 
-                            
+                        <MyGrid
                             justify="flex-end"
                             item xs={1}
                         // alignItems="flex-start"
                         >
-
                             <Button
                                 variant="outlined"
-                                color= 'inherit'
+                                color='inherit'
                                 size="small"
-
                                 onClick={this.onLogout}>Log out</Button>
-
                         </MyGrid>
-
-
-
-
                     </Grid>
-
-                    {/* <button className="square" onClick={this.onLogout}>Log out</button> */}
                 </div>
             );
         }
         else {
             return (
-                <div style={p1Style}>
-                    <Container>
-                        <div>Hey you, please log in!</div><a className="variant" href="/Login">Log in</a>
-                    </Container>
+                <div >
+                    <Grid container spacing={3}>
+                        <MyGrid item xs={12}>
+                            Welcome to AirDog!  Please  
+                            <a>  </a>
+                            <Button
+                                variant="outlined"
+                                color='inherit'
+                                size="small"
+                                href="/Login">Log in</Button>
+                        </MyGrid >    
+                    </Grid>
                 </div>
             );
         };;
