@@ -19,7 +19,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "history": "^4.10.1",
-    "jquery": "^1.9.1",
+    "jquery": "^3.5.0",
     "mdbreact": "^4.25.3",
     "mongoose": "^5.9.3",
     "morgan": "^1.9.1",
